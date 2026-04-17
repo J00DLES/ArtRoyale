@@ -13,5 +13,13 @@ These tables have relationships
 - User → Characters (1-to-many)
 - Character → Images (1-to-many) 
 - Users ↔ Attacks (many-to-many via attacker/defender)
-- Character → Attacks
+- Character → Attacks (1-to-many)
+
+Note that the attack table is doing something special
+- creates a many-to-many relationship between users
+- Many users attack many other users, but instead of a join table, you store:
+  - attacker_id
+  - defender_id
+
+This is a self-referencing relationship.
 
