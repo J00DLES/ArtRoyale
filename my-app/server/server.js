@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { application } from "express";
 import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -7,6 +7,7 @@ import { create } from "express-handlebars";
 import { loadUser } from "./middleware/auth.js";
 
 import authController from "./controllers/auth.js";
+import usersController from "./controllers/users.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,6 +29,7 @@ app.use(loadUser);
 
 // API Routes
 app.use("/api/auth", authController);
+app.use("/api/users", usersController);
 
 // Serve the React app
 if (process.env.NODE_ENV === "production") {
