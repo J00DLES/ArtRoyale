@@ -133,6 +133,24 @@ body {
   font-size: 1rem;
 }
 
+.image-preview {
+  margin-top: 1rem;
+}
+
+.image-preview p {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.image-preview img {
+  display: block;
+  max-width: 240px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  object-fit: cover;
+}
+
 /* Home */
 .home-logo {
   display: block;
