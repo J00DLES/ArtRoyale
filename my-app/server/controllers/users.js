@@ -29,4 +29,9 @@ router.get("/:id", requireAuth, async (req, res) => {
   }
 });
 
+
+// GET /api/users/:id/characters - get all characters for a user
+
+
 export default router;
+

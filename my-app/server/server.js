@@ -8,6 +8,7 @@ import { loadUser } from "./middleware/auth.js";
 
 import authController from "./controllers/auth.js";
 import usersController from "./controllers/users.js";
+import charactersController from "./controllers/characters.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,6 +31,7 @@ app.use(loadUser);
 // API Routes
 app.use("/api/auth", authController);
 app.use("/api/users", usersController);
+app.use("/api/characters", charactersController);
 
 // Serve the React app
 if (process.env.NODE_ENV === "production") {

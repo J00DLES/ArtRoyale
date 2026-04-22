@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import UserPage from "./pages/UserPage";
+import CharacterCreation from "./pages/CharacterCreation";
 
 function App() {
   const { loading } = useAuth();
@@ -22,6 +23,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/users/:id" element={<UserPage />} />
+          <Route path="/characters/new" element={<CharacterCreation />} />
         </Routes>
       </main>
     </>

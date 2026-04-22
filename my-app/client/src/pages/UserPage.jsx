@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useRequireUser } from "../hooks/useRequireUser";
+import { Link } from "react-router";
 
 
 // this is a page to view a user's profile and their art pieces. For now it just shows the user's info, 
 // but we can expand it later to show their art pieces and other info.
 
 function UserPage() {
-    useRequireUser();
+    const currentUser = useRequireUser();
     const { id } = useParams();
     const [profileUser, setProfileUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const isOwnProfile = Number(currentUser?.id) === Number(profileUser?.id);
 
     useEffect(() => {
         let isMounted = true;
@@ -65,6 +67,11 @@ function UserPage() {
                 <p>Eventually there will be characters and a bio here. </p>
                 <h2>Characters</h2>
                 <p>Show the five most recent characters made by the user.</p>
+                {isOwnProfile && (
+                    <Link to="/characters/new" className="btn btn-primary create-character-button">
+                        Create Character
+                    </Link>
+                )}
                 <h2>Recent Attacks</h2>
                 <p>Show the five most recent attacks made by the user.</p>
             </div>
