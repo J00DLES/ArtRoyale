@@ -36,3 +36,8 @@ Private routes
 - [ ] `GET/characters/new` - Page to create a new character
 - [ ] `GET /attack/new` - page to attack
 - [ ] `POST/characters/new` - submit new character
+
+
+# CURRENTLY....
+I am messing with image uploads. I added a character (it seemed to upload the image five times, this might need to be fixed haha.) 
+- now i need to make a characters/id page to show a character page. this way i can test if the form for character creation works.
