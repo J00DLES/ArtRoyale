@@ -22,6 +22,15 @@ export async function createCharacterImage(characterId, imageUrl, isPrimary = tr
   return result.rows[0];
 }
 
+export async function clearPrimaryCharacterImages(characterId) {
+  await pool.query(
+    `UPDATE character_images
+     SET is_primary = false
+     WHERE character_id = $1 AND is_primary = true`,
+    [characterId]
+  );
+}
+
 export async function getCharacterById(characterId) {
   const result = await pool.query(
     `SELECT c.id,
@@ -35,7 +44,7 @@ export async function getCharacterById(characterId) {
        SELECT image_url
        FROM character_images
        WHERE character_id = c.id
-       ORDER BY is_primary DESC, id ASC
+       ORDER BY is_primary DESC, id DESC
        LIMIT 1
      ) ci ON true
      WHERE c.id = $1`,
@@ -44,3 +53,97 @@ export async function getCharacterById(characterId) {
 
   return result.rows[0] || null;
 }
+
+export async function updateCharacter(characterId, name, description) {
+  const result = await pool.query(
+    `UPDATE characters
+     SET name = $1,
+         description = $2
+     WHERE id = $3
+     RETURNING id, user_id, name, description, created_at`,
+    [name, description || null, characterId]
+  );
+
+  return result.rows[0];
+}
+
+export async function getCharactersByUserId(userId) {
+  const result = await pool.query(
+    `SELECT c.id,
+            c.user_id,
+            c.name,
+            c.description,
+            c.created_at,
+          NULLIF(BTRIM(ci.image_url), '') AS image_url
+     FROM characters c
+     LEFT JOIN LATERAL (
+       SELECT image_url
+       FROM character_images
+       WHERE character_id = c.id
+       ORDER BY is_primary DESC, id DESC
+       LIMIT 1
+     ) ci ON true
+     WHERE c.user_id = $1
+     ORDER BY c.created_at DESC`,
+    [userId]
+  );
+
+  return result.rows;
+}
+
+export async function deleteCharacter(characterId) {
+  await pool.query(
+    `DELETE FROM characters
+     WHERE id = $1`,
+    [characterId]
+  );
+}
+
+export async function deleteCharacterImages(characterId) {
+  await pool.query(
+    `DELETE FROM character_images
+     WHERE character_id = $1`,
+    [characterId]
+  );
+}
+
+export async function updateCharacterImage(characterId, imageUrl) {
+  const result = await pool.query(
+    `UPDATE character_images
+     SET image_url = $1,
+         updated_at = NOW()
+     WHERE character_id = $2 AND is_primary = true
+     RETURNING id, character_id, image_url, is_primary, created_at, updated_at`,
+    [imageUrl, characterId]
+  );
+
+  return result.rows[0];
+}
+
+
+
+
+export async function getRecentCharacters(limit = 10) {
+  const result = await pool.query(
+    `SELECT c.id,
+            c.user_id,
+            c.name,
+            c.description,
+            c.created_at,
+          NULLIF(BTRIM(ci.image_url), '') AS image_url
+     FROM characters c
+     LEFT JOIN LATERAL (
+       SELECT image_url
+       FROM character_images
+       WHERE character_id = c.id
+       ORDER BY is_primary DESC, id DESC
+       LIMIT 1
+     ) ci ON true
+     ORDER BY c.created_at DESC
+     LIMIT $1`,
+    [limit]
+  );
+
+  return result.rows;
+}
+

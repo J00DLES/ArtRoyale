@@ -5,7 +5,9 @@ import cloudinary from "../config/cloudinary.js";
 import {
   createCharacter,
   createCharacterImage,
+  clearPrimaryCharacterImages,
   getCharacterById,
+    updateCharacter,
 } from "../models/characters.js";
 
 const router = express.Router();
@@ -80,6 +82,69 @@ router.get("/:id", async (req, res) => {
     res.json(character);
   } catch (err) {
     console.error("Error fetching character:", err);
+    res.status(500).json({ error: "Server error." });
+  }
+});
+
+
+router.get("/:id/edit", requireAuth, async (req, res) => {
+  const characterId = req.params.id;
+
+  try {
+    const character = await getCharacterById(characterId);
+
+    if (!character) {
+      return res.status(404).json({ error: "Character not found." });
+    }
+
+    if (character.user_id !== req.user.id) {
+      return res.status(403).json({ error: "You do not have permission to edit this character." });
+    }
+
+    res.json(character);
+  } catch (err) {
+    console.error("Error fetching character for edit:", err);
+    res.status(500).json({ error: "Server error." });
+  }
+});
+
+router.post("/:id/edit", requireAuth, upload.single("image"), async (req, res) => {
+  const characterId = req.params.id;
+  const { name, description } = req.body;
+
+  if (!name) {
+    return res.status(400).json({ error: "Character name is required." });
+  }
+
+  try {
+    const character = await getCharacterById(characterId);
+
+    if (!character) {
+      return res.status(404).json({ error: "Character not found." });
+    }
+
+    if (character.user_id !== req.user.id) {
+      return res.status(403).json({ error: "You do not have permission to edit this character." });
+    }
+
+    let imageUrl = character.image_url;
+
+    if (req.file) {
+      const uploadedImage = await uploadBufferToCloudinary(req.file.buffer);
+      imageUrl = uploadedImage.secure_url;
+      await clearPrimaryCharacterImages(character.id);
+      await createCharacterImage(character.id, imageUrl, true);
+    }
+
+    const updatedCharacter = await updateCharacter(characterId, name, description);
+    res.json({
+      character: {
+        ...updatedCharacter,
+        image_url: imageUrl,
+      },
+    });
+  } catch (err) {
+    console.error("Error updating character:", err);
     res.status(500).json({ error: "Server error." });
   }
 });
