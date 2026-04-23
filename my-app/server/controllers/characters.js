@@ -11,7 +11,22 @@ import {
 } from "../models/characters.js";
 
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() });
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_IMAGE_SIZE_BYTES },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype?.startsWith("image/")) {
+      cb(null, true);
+      return;
+    }
+
+    const typeError = new Error("Only image uploads are allowed.");
+    typeError.code = "LIMIT_FILE_TYPE";
+    cb(typeError);
+  },
+});
 
 function uploadBufferToCloudinary(buffer) {
   return new Promise((resolve, reject) => {
@@ -149,4 +164,20 @@ router.post("/:id/edit", requireAuth, upload.single("image"), async (req, res) =
   }
 });
 
+router.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {
+    return res
+      .status(400)
+      .json({ error: "Image must be 5MB or smaller." });
+  }
+
+  if (err?.code === "LIMIT_FILE_TYPE") {
+    return res.status(400).json({ error: err.message });
+  }
+
+  next(err);
+});
+
 export default router;
+
+

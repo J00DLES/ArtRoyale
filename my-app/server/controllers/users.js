@@ -1,6 +1,7 @@
 import express from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { findById } from '../models/users.js';
+import { getCharactersByUserId } from '../models/characters.js';
 
 const router = express.Router();
 
@@ -31,6 +32,25 @@ router.get("/:id", requireAuth, async (req, res) => {
 
 
 // GET /api/users/:id/characters - get all characters for a user
+
+router.get("/:id/characters", requireAuth, async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+
+  if (Number.isNaN(userId)) {
+    return res.status(400).json({ error: "Invalid user id." });
+  }
+
+  try {
+    const characters = await getCharactersByUserId(userId);
+
+    res.json({
+      characters,
+    });
+  } catch (err) {
+    console.error("Error fetching user's characters:", err);
+    res.status(500).json({ error: "Server error." });
+  }
+});
 
 
 export default router;

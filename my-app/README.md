@@ -39,5 +39,6 @@ Private routes
 
 
 # CURRENTLY....
-I am messing with image uploads. I added a character (it seemed to upload the image five times, this might need to be fixed haha.) 
-- now i need to make a characters/id page to show a character page. this way i can test if the form for character creation works.
+I got image uploads to work. Implemented some routes. I am working on implementing the users/:id/characters page. Right now 
+it just shows links to the characters. Eventually, I want there to be image previews for each character, and their name
+displayed. Maybe in a little box with a red border?
