@@ -2,7 +2,11 @@ import express from "express";
 import multer from "multer";
 import { requireAuth } from "../middleware/auth.js";
 import cloudinary from "../config/cloudinary.js";
-import { createCharacter, createCharacterImage } from "../models/characters.js";
+import {
+  createCharacter,
+  createCharacterImage,
+  getCharacterById,
+} from "../models/characters.js";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -59,6 +63,23 @@ router.post("/new", requireAuth, upload.single("image"), async (req, res) => {
     });
   } catch (err) {
     console.error("Error creating character:", err);
+    res.status(500).json({ error: "Server error." });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const characterId = req.params.id;
+
+  try {
+    const character = await getCharacterById(characterId);
+
+    if (!character) {
+      return res.status(404).json({ error: "Character not found." });
+    }
+
+    res.json(character);
+  } catch (err) {
+    console.error("Error fetching character:", err);
     res.status(500).json({ error: "Server error." });
   }
 });

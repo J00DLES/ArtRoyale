@@ -78,6 +78,13 @@ body {
   background-color: #357abd;
 }
 
+.btn-edit {
+  display: inline-block;
+  margin-top: 1rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 .create-character-button {
   display: inline-block;
   text-decoration: none;
