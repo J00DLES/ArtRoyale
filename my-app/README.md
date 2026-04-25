@@ -28,17 +28,16 @@ Public Routes (some display/links will depend on authentication)
 - [ ] `GET/` - Home page with a quick description of how it works, and recent characters (maybe even include team statistics/leaderboard)
 - [x] `GET/users/:id` - Shows a page with information about a specific user.
 - [ ] `GET/characters/recent` Shows recent characters (from anyone) (link to this on home page?)
-- [ ] `GET/characters/:id` Shows a specific character's page.
+- [x] `GET/characters/:id` Shows a specific character's page.
 - [ ] `GET/users/:id/characters` Shows all characters by a specific user
-
+- [ ] `GET/users/:id/attacks` - shows all attacks by a specific user
 
 Private routes
-- [ ] `GET/characters/new` - Page to create a new character
+- [x] `GET/characters/new` - Page to create a new character
 - [ ] `GET /attack/new` - page to attack
-- [ ] `POST/characters/new` - submit new character
-
+- [x] `POST/characters/new` - submit new character
+- [ ] `POST/characters/:id/delete` - delete existing character
 
 # CURRENTLY....
-I got image uploads to work. Implemented some routes. I am working on implementing the users/:id/characters page. Right now 
-it just shows links to the characters. Eventually, I want there to be image previews for each character, and their name
-displayed. Maybe in a little box with a red border?
+I added the character previews on the user page and fixed image sizing. Next i need to implement the delte character endpoint
+and implement attacks.

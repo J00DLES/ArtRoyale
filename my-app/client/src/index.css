@@ -158,6 +158,56 @@ body {
   object-fit: cover;
 }
 
+.character-page-image {
+  display: block;
+  width: 320px;
+  height: 320px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  object-fit: cover;
+}
+
+.character-page-image-link {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.user-character-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.user-character-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-character-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+}
+
+.user-character-image--empty {
+  display: grid;
+  place-items: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.user-character-name {
+  font-weight: 600;
+  text-align: center;
+}
+
 /* Home */
 .home-logo {
   display: block;

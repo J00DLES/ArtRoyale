@@ -71,7 +71,19 @@ function CharacterPage() {
             <h1>{character.name}</h1>
             <p>{character.description}</p>
             {resolvedImageUrl ? (
-                <img src={resolvedImageUrl} alt={character.name} />
+                <a
+                    href={resolvedImageUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="character-page-image-link"
+                    aria-label={`Open full-size image for ${character.name}`}
+                >
+                    <img
+                        src={resolvedImageUrl}
+                        alt={character.name}
+                        className="character-page-image"
+                    />
+                </a>
             ) : (
                 <p>No image available for this character yet.</p>
             )}

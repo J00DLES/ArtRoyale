@@ -11,9 +11,28 @@ function UserPage() {
     const currentUser = useRequireUser();
     const { id } = useParams();
     const [profileUser, setProfileUser] = useState(null);
+    const [recentCharacters, setRecentCharacters] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const isOwnProfile = Number(currentUser?.id) === Number(profileUser?.id);
+
+    function normalizeImageUrl(rawUrl) {
+        if (!rawUrl || typeof rawUrl !== "string") {
+            return "";
+        }
+
+        const trimmed = rawUrl.trim();
+
+        if (!trimmed) {
+            return "";
+        }
+
+        if (trimmed.startsWith("//")) {
+            return `https:${trimmed}`;
+        }
+
+        return trimmed;
+    }
 
     useEffect(() => {
         let isMounted = true;
@@ -23,15 +42,32 @@ function UserPage() {
             setError("");
 
             try {
-                const res = await fetch(`/api/users/${id}`);
-                const data = await res.json();
+                const [profileRes, charactersRes] = await Promise.all([
+                    fetch(`/api/users/${id}`),
+                    fetch(`/api/users/${id}/characters`),
+                ]);
 
-                if (!res.ok) {
-                    throw new Error(data.error || "Failed to load user profile.");
+                const profileData = await profileRes.json();
+                const charactersData = await charactersRes.json();
+
+                if (!profileRes.ok) {
+                    throw new Error(profileData.error || "Failed to load user profile.");
+                }
+
+                if (!charactersRes.ok) {
+                    throw new Error(charactersData.error || "Failed to load user characters.");
                 }
 
                 if (isMounted) {
-                    setProfileUser(data.user);
+                    setProfileUser(profileData.user);
+                    setRecentCharacters(
+                        (charactersData.characters || [])
+                            .slice(0, 5)
+                            .map((character) => ({
+                                ...character,
+                                imageUrl: normalizeImageUrl(character.imageUrl ?? character.image_url),
+                            }))
+                    );
                 }
             } catch (err) {
                 if (isMounted) {
@@ -64,9 +100,34 @@ function UserPage() {
         <div className="user-page">
             <h1>{profileUser?.username}'s Profile</h1>
             <div className="user-info">
-                <p>Eventually there will be characters and a bio here. </p>
                 <h2>Characters</h2>
-                <p>Show the five most recent characters made by the user.</p>
+                {recentCharacters.length > 0 ? (
+                    <div className="user-character-grid">
+                        {recentCharacters.map((character) => (
+                            <Link
+                                key={character.id}
+                                to={`/characters/${character.id}`}
+                                className="user-character-card"
+                            >
+                                {character.imageUrl ? (
+                                    <img
+                                        src={character.imageUrl}
+                                        alt={character.name}
+                                        className="user-character-image"
+                                    />
+                                ) : (
+                                    <div className="user-character-image user-character-image--empty">
+                                        <span>No image</span>
+                                    </div>
+                                )}
+                                <span className="user-character-name">{character.name}</span>
+                            </Link>
+                        ))}
+                    </div>
+                ) : (
+                    <p>No characters yet.</p>
+                )}
+
                 {isOwnProfile && (
                     <Link to="/characters/new" className="btn btn-primary create-character-button">
                         Create Character
