@@ -100,7 +100,16 @@ function UserPage() {
         <div className="user-page">
             <h1>{profileUser?.username}'s Profile</h1>
             <div className="user-info">
-                <h2>Characters</h2>
+                <div className="profile-banner">
+                    <h2 className="profile-banner-title">Characters</h2>
+                    <div>
+                        {isOwnProfile && (
+                        <Link to="/characters/new" className="profile-banner-button">create character</Link>
+                        )}  
+                         <Link to ={`/users/${id}/characters`} className="profile-banner-button">view all...</Link>
+                    </div>
+                   
+                </div>
                 {recentCharacters.length > 0 ? (
                     <div className="user-character-grid">
                         {recentCharacters.map((character) => (
@@ -128,12 +137,9 @@ function UserPage() {
                     <p>No characters yet.</p>
                 )}
 
-                {isOwnProfile && (
-                    <Link to="/characters/new" className="btn btn-primary create-character-button">
-                        Create Character
-                    </Link>
-                )}
-                <h2>Recent Attacks</h2>
+               <div className="profile-banner">
+                <h2 className="profile-banner-title">Recent Attacks</h2>
+                </div>
                 <p>Show the five most recent attacks made by the user.</p>
             </div>
             {/* We can add more user info and art pieces here later */}

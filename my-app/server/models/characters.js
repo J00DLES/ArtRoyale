@@ -35,11 +35,13 @@ export async function getCharacterById(characterId) {
   const result = await pool.query(
     `SELECT c.id,
             c.user_id,
+            u.username,
             c.name,
             c.description,
             c.created_at,
           NULLIF(BTRIM(ci.image_url), '') AS image_url
      FROM characters c
+     JOIN users u ON u.id = c.user_id
      LEFT JOIN LATERAL (
        SELECT image_url
        FROM character_images

@@ -26,6 +26,7 @@ function Navbar() {
           <Link to="/">Home</Link>
           {user ? (
             <>
+              <Link to={`/users/${user.id}`}>My Profile</Link>
               <span className="navbar-user">Hi, {user.username}</span>
               <button onClick={handleLogout} className="btn btn-logout">
                 Logout

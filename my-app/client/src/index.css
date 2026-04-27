@@ -231,3 +231,38 @@ body {
   border-radius: 4px;
   margin-bottom: 1rem;
 }
+
+
+.profile-banner-button {
+  display: inline-block;
+  margin-top: 0.5rem;
+  border: 1px solid white;
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+}
+
+.profile-banner-button:hover {
+  background-color: white;
+  color: #A4133C;
+  text-decoration: none;
+}
+
+
+.profile-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: #A4133C;
+}
+
+.profile-banner-title {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-left: 1rem;
+}

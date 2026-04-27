@@ -69,6 +69,7 @@ function CharacterPage() {
     return (
         <div>
             <h1>{character.name}</h1>
+            <h3>created by: {character.username|| "Unknown Artist"}</h3>
             <p>{character.description}</p>
             {resolvedImageUrl ? (
                 <a
