@@ -6,6 +6,7 @@ import {
   createCharacter,
   createCharacterImage,
   clearPrimaryCharacterImages,
+  deleteCharacter,
   getCharacterById,
     updateCharacter,
 } from "../models/characters.js";
@@ -177,6 +178,31 @@ router.use((err, req, res, next) => {
 
   next(err);
 });
+
+async function handleDeleteCharacter(req, res) {
+  const characterId = req.params.id;
+
+  try {
+    const character = await getCharacterById(characterId);
+
+    if (!character) {
+      return res.status(404).json({ error: "Character not found." });
+    }
+
+    if (character.user_id !== req.user.id) {
+      return res.status(403).json({ error: "You do not have permission to delete this character." });
+    }
+
+    await deleteCharacter(characterId);
+    return res.json({ message: "Character deleted successfully." });
+  } catch (err) {
+    console.error("Error deleting character:", err);
+    res.status(500).json({ error: "Server error." });
+  }
+}
+
+router.delete("/:id", requireAuth, handleDeleteCharacter);
+router.post("/:id/delete", requireAuth, handleDeleteCharacter);
 
 export default router;
 
