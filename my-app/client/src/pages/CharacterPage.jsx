@@ -10,6 +10,7 @@ function CharacterPage() {
     const [resolvedImageUrl, setResolvedImageUrl] = useState("");
     const [error, setError] = useState("");
     const [deleting, setDeleting] = useState(false);
+    const [attacks, setAttacks] = useState([]);
 
     function normalizeImageUrl(rawUrl) {
         if (!rawUrl || typeof rawUrl !== "string") {
@@ -58,6 +59,25 @@ function CharacterPage() {
         }
 
         fetchCharacter();
+    }, [characterId]);
+
+    useEffect(() => {
+        async function fetchAttacks() {
+            try {
+                const res = await fetch(`/api/characters/${characterId}/attacks`);
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.error || "Failed to fetch attacks.");
+                }
+
+                setAttacks(Array.isArray(data.attacks) ? data.attacks : []);
+            } catch (err) {
+                setError(err.message || "Failed to fetch attacks.");
+            }
+        }
+
+        fetchAttacks();
     }, [characterId]);
 
     if (error) {
@@ -123,7 +143,12 @@ function CharacterPage() {
             )}
        
                  <div>
-                 {user && user.id === character.userId && (
+                {user && user.id !== character.userId && (
+                    <Link to={`/characters/${characterId}/attack`} className="btn btn-primary btn-attack">
+                        Attack!
+                    </Link>
+                )}
+                {user && user.id === character.userId && (
                 <Link to={`/characters/${characterId}/edit`} className="btn btn-primary btn-edit">
                     Edit Character
                 </Link>
@@ -143,7 +168,26 @@ function CharacterPage() {
             <div className="profile-banner">
                 <h2 className="profile-banner-title">Attacks</h2>
             </div>
-            <p>Once i have implemented attacks feature show all the attacks on this character below.</p>
+            {attacks.length === 0 ? (
+                <p>No attacks yet. Be the first to send a message.</p>
+            ) : (
+                <ul>
+                    {attacks.map((attack) => (
+                        <div key={attack.id}>
+                            <strong>{attack.attacker_username || "unknown"}</strong>: {attack.message}
+                            {attack.image_url && (
+                                <div>
+                                    <img
+                                        src={attack.image_url}
+                                        alt={`Attack from ${attack.attacker_username || "Unknown"}`}
+                                        className="character-page-image"
+                                    />
+                                </div>
+                            )}
+                       </div>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }

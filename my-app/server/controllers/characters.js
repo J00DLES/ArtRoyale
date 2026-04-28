@@ -10,6 +10,7 @@ import {
   getCharacterById,
     updateCharacter,
 } from "../models/characters.js";
+import { createAttack, getAttacksByCharacterId } from "../models/attacks.js";
 
 const router = express.Router();
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
@@ -29,11 +30,11 @@ const upload = multer({
   },
 });
 
-function uploadBufferToCloudinary(buffer) {
+function uploadBufferToCloudinary(buffer, folder = "characters") {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
-        folder: "characters",
+        folder,
       },
       (error, result) => {
         if (error) {
@@ -203,6 +204,90 @@ async function handleDeleteCharacter(req, res) {
 
 router.delete("/:id", requireAuth, handleDeleteCharacter);
 router.post("/:id/delete", requireAuth, handleDeleteCharacter);
+
+
+// attack routes 
+router.get("/:id/attack", async (req, res) => {
+  const characterId = req.params.id;
+
+  try {
+    const character = await getCharacterById(characterId);
+
+    if (!character) {
+      return res.status(404).json({ error: "Character not found." });
+    }
+
+    res.json({
+      message: `This will eventually return a form to attack ${character.name}.`,
+      character,
+    });
+  } catch (err) {
+    console.error("Error fetching character for attack:", err);
+    res.status(500).json({ error: "Server error." });
+  }
+});
+
+router.get("/:id/attacks", async (req, res) => {
+  const characterId = req.params.id;
+
+  try {
+    const character = await getCharacterById(characterId);
+
+    if (!character) {
+      return res.status(404).json({ error: "Character not found." });
+    }
+
+    const attacks = await getAttacksByCharacterId(characterId);
+    return res.json({ attacks });
+  } catch (err) {
+    console.error("Error fetching attacks for character:", err);
+    return res.status(500).json({ error: "Server error." });
+  }
+});
+
+router.post("/:id/attack", requireAuth, upload.single("image"), async (req, res) => {
+  const characterId = req.params.id;
+  const message = req.body?.message?.trim();
+
+  if (!message) {
+    return res.status(400).json({ error: "Attack message is required." });
+  }
+
+  if (!req.file) {
+    return res.status(400).json({ error: "Attack image is required." });
+  }
+
+  if (message.length > 280) {
+    return res.status(400).json({ error: "Attack message must be 280 characters or fewer." });
+  }
+
+  try {
+    const character = await getCharacterById(characterId);
+
+    if (!character) {
+      return res.status(404).json({ error: "Character not found." });
+    }
+
+    if (character.user_id === req.user.id) {
+      return res.status(400).json({ error: "You cannot attack your own character." });
+    }
+
+    const uploadedImage = await uploadBufferToCloudinary(req.file.buffer, "attacks");
+
+    const attack = await createAttack({
+      attackerId: req.user.id,
+      defenderId: character.user_id,
+      characterId,
+      imageUrl: uploadedImage.secure_url,
+      message,
+    });
+
+    return res.status(201).json({ attack });
+  } catch (err) {
+    console.error("Error creating attack:", err);
+    return res.status(500).json({ error: "Server error." });
+  }
+});
 
 export default router;
 

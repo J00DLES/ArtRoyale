@@ -9,6 +9,7 @@ import CharacterCreation from "./pages/CharacterCreation";
 import CharacterPage from "./pages/CharacterPage";
 import EditCharacter from "./pages/EditCharacter";
 import UserCharacters from "./pages/UserCharacters";
+import Attack from "./pages/Attack";
 
 function App() {
   const { loading } = useAuth();
@@ -30,6 +31,7 @@ function App() {
           <Route path="/characters/:id" element={<CharacterPage />} />
           <Route path="/characters/:id/edit" element={<EditCharacter />} />
           <Route path="users/:id/characters" element={<UserCharacters />} />
+          <Route path="/characters/:id/attack" element={<Attack />} />
         </Routes>
       </main>
     </>

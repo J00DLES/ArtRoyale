@@ -1,0 +1,2 @@
+ALTER TABLE attacks
+ADD COLUMN IF NOT EXISTS message TEXT;
