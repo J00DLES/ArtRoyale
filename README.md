@@ -49,10 +49,10 @@ I believe my project idea is a strong balance between applying the knowledge I h
 
 Core Features (Must-Have)
 These features are essential to meet the project goals:
-- [ ] User authentication (registration and login)
-- [ ] User profiles and character creation
-- [ ] Attack submission system (including image upload via URL)
-- [ ] Display of attacks and user interactions
+- [x] User authentication (registration and login)
+- [x] User profiles and character creation
+- [x] Attack submission system (including image upload via URL)
+- [x] Display of attacks and user interactions
 - [ ] Basic inspiration generator using an external API
 
 Stretch Goals (Nice-to-Have)
