@@ -8,7 +8,8 @@ import {
   clearPrimaryCharacterImages,
   deleteCharacter,
   getCharacterById,
-    updateCharacter,
+  getRecentCharacters,
+  updateCharacter,
 } from "../models/characters.js";
 import { createAttack, getAttacksByCharacterId } from "../models/attacks.js";
 
@@ -83,6 +84,16 @@ router.post("/new", requireAuth, upload.single("image"), async (req, res) => {
   } catch (err) {
     console.error("Error creating character:", err);
     res.status(500).json({ error: "Server error." });
+  }
+});
+
+router.get("/recent", async (req, res) => {
+  try {
+    const characters = await getRecentCharacters(20);
+    return res.json({ characters });
+  } catch (err) {
+    console.error("Error fetching recent characters:", err);
+    return res.status(500).json({ error: "Server error." });
   }
 });
 

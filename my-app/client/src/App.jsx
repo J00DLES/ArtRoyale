@@ -10,6 +10,8 @@ import CharacterPage from "./pages/CharacterPage";
 import EditCharacter from "./pages/EditCharacter";
 import UserCharacters from "./pages/UserCharacters";
 import Attack from "./pages/Attack";
+import AttackPage from "./pages/AttackPage";
+import RecentCharacters from "./pages/RecentCharacters";
 
 function App() {
   const { loading } = useAuth();
@@ -32,6 +34,8 @@ function App() {
           <Route path="/characters/:id/edit" element={<EditCharacter />} />
           <Route path="users/:id/characters" element={<UserCharacters />} />
           <Route path="/characters/:id/attack" element={<Attack />} />
+          <Route path="/attacks/:id" element={<AttackPage />} />
+          <Route path="/characters/recent" element={<RecentCharacters />} />
         </Routes>
       </main>
     </>

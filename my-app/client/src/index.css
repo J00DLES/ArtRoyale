@@ -172,6 +172,47 @@ body {
   max-width: 100%;
 }
 
+.character-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.character-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.character-card-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+}
+
+.character-card-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.character-card-name {
+  font-weight: 600;
+  text-align: center;
+}
+
 .user-character-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -206,6 +247,57 @@ body {
 .user-character-name {
   font-weight: 600;
   text-align: center;
+}
+
+/* Attacks list - match preview image sizing */
+.user-attack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.user-attack-card {
+  display: flex;
+  flex-direction: column;
+  
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-attack-image {
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+}
+
+.user-attack-image--empty {
+  display: grid;
+  place-items: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.user-attack-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.user-attack-message {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.user-attack-target {
+  font-size: 0.95rem;
+  color: #444;
+  font-weight: 600;
 }
 
 /* Home */

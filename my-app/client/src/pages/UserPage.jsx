@@ -12,6 +12,7 @@ function UserPage() {
     const { id } = useParams();
     const [profileUser, setProfileUser] = useState(null);
     const [recentCharacters, setRecentCharacters] = useState([]);
+    const [recentAttacks, setRecentAttacks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const isOwnProfile = Number(currentUser?.id) === Number(profileUser?.id);
@@ -42,13 +43,15 @@ function UserPage() {
             setError("");
 
             try {
-                const [profileRes, charactersRes] = await Promise.all([
+                const [profileRes, charactersRes, attacksRes] = await Promise.all([
                     fetch(`/api/users/${id}`),
                     fetch(`/api/users/${id}/characters`),
+                    fetch(`/api/users/${id}/attacks`),
                 ]);
 
                 const profileData = await profileRes.json();
                 const charactersData = await charactersRes.json();
+                const attacksData = await attacksRes.json();
 
                 if (!profileRes.ok) {
                     throw new Error(profileData.error || "Failed to load user profile.");
@@ -66,6 +69,14 @@ function UserPage() {
                             .map((character) => ({
                                 ...character,
                                 imageUrl: normalizeImageUrl(character.imageUrl ?? character.image_url),
+                            }))
+                    );
+                    setRecentAttacks(
+                        (attacksData.attacks || [])
+                            .slice(0, 5)
+                            .map((attack) => ({
+                                ...attack,
+                                imageUrl: normalizeImageUrl(attack.image_url ?? attack.imageUrl),
                             }))
                     );
                 }
@@ -140,9 +151,38 @@ function UserPage() {
                <div className="profile-banner">
                 <h2 className="profile-banner-title">Recent Attacks</h2>
                 </div>
-                <p>Show the five most recent attacks made by the user.</p>
+                {recentAttacks.length > 0 ? (
+                    <div className="user-attack-grid">
+                        {recentAttacks.map((attack) => (
+                            <Link
+                                key={attack.id}
+                                to={`/attacks/${attack.id}`}
+                                className="user-attack-card"
+                            >
+                               
+                                {attack.imageUrl ? (
+                                    <img
+                                        src={attack.imageUrl}
+                                        alt={attack.message || "attack"}
+                                        className="user-attack-image"
+                                    />
+                                ) : (
+                                    <div className="user-attack-image user-attack-image--empty">
+                                        <span>No image</span>
+                                    </div>
+                                )}
+                                 <strong className="user-attack-message">{attack.message}</strong>
+                                    <strong className="user-attack-target">to {attack.defender_username ?? attack.defender_id}</strong>
+                                
+                            </Link>
+                        ))}
+                    </div>
+                ) : (
+                    <p>No attacks yet.</p>
+                )}
+                
             </div>
-            {/* We can add more user info and art pieces here later */}
+            
         </div>
     );
 }

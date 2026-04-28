@@ -41,3 +41,54 @@ export async function getAttacksByCharacterId(characterId, limit = 25) {
 
   return result.rows;
 }
+
+export async function getAttacksByUserId(userId, limit = 25) {
+  const parsedLimit = Number.isInteger(limit) ? limit : 25;
+
+  const result = await pool.query(
+    `SELECT a.id,
+            a.attacker_id,
+            a.defender_id,
+            a.character_id,
+            a.image_url,
+            a.type,
+            a.points,
+            a.message,
+            a.created_at,
+            au.username AS attacker_username,
+            du.username AS defender_username
+     FROM attacks a
+     JOIN users au ON au.id = a.attacker_id
+     LEFT JOIN users du ON du.id = a.defender_id
+     WHERE a.attacker_id = $1
+     ORDER BY a.created_at DESC
+     LIMIT $2`,
+    [userId, parsedLimit]
+  );
+
+  return result.rows;
+}
+
+export async function getAttackById(attackId) {
+  const result = await pool.query(
+    `SELECT a.id,
+            a.attacker_id,
+            a.defender_id,
+            a.character_id,
+            a.image_url,
+            a.type,
+            a.points,
+            a.message,
+            a.created_at,
+            au.username AS attacker_username,
+            du.username AS defender_username
+     FROM attacks a
+     JOIN users au ON au.id = a.attacker_id
+     LEFT JOIN users du ON du.id = a.defender_id
+     WHERE a.id = $1
+     LIMIT 1`,
+    [attackId]
+  );
+
+  return result.rows[0] || null;
+}

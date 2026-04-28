@@ -2,6 +2,7 @@ import express from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { findById } from '../models/users.js';
 import { getCharactersByUserId } from '../models/characters.js';
+import { getAttacksByUserId } from '../models/attacks.js';
 
 const router = express.Router();
 
@@ -51,6 +52,27 @@ router.get("/:id/characters", requireAuth, async (req, res) => {
     res.status(500).json({ error: "Server error." });
   }
 });
+
+
+// GET /api/users/:id/attacks - recent attacks made by the user
+router.get("/:id/attacks", requireAuth, async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+
+  if (Number.isNaN(userId)) {
+    return res.status(400).json({ error: "Invalid user id." });
+  }
+
+  try {
+    const attacks = await getAttacksByUserId(userId, 5);
+
+    res.json({ attacks });
+  } catch (err) {
+    console.error("Error fetching user's attacks:", err);
+    res.status(500).json({ error: "Server error." });
+  }
+});
+
+
 
 
 export default router;

@@ -171,22 +171,24 @@ function CharacterPage() {
             {attacks.length === 0 ? (
                 <p>No attacks yet. Be the first to send a message.</p>
             ) : (
-                <ul>
+                <div>
                     {attacks.map((attack) => (
                         <div key={attack.id}>
-                            <strong>{attack.attacker_username || "unknown"}</strong>: {attack.message}
-                            {attack.image_url && (
-                                <div>
-                                    <img
-                                        src={attack.image_url}
-                                        alt={`Attack from ${attack.attacker_username || "Unknown"}`}
-                                        className="character-page-image"
-                                    />
-                                </div>
-                            )}
-                       </div>
+                            <Link to={`/attacks/${attack.id}`} className="attack-list-item">
+                                <strong>{attack.attacker_username || "unknown"}</strong>: {attack.message}
+                                {attack.image_url && (
+                                    <div>
+                                        <img
+                                            src={attack.image_url}
+                                            alt={`Attack from ${attack.attacker_username || "Unknown"}`}
+                                            className="character-page-image"
+                                        />
+                                    </div>
+                                )}
+                            </Link>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );

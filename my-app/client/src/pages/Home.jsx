@@ -1,4 +1,5 @@
 import { useAuth } from "../hooks/useAuth";
+import { Link } from "react-router";
 import logo from "../assets/logo.png";
 
 function Home() {
@@ -7,7 +8,14 @@ function Home() {
   return (
     <div style={{ textAlign: "center" }}>
       <h2>{user ? `Welcome to Art Royale, ${user.username}!` : "Welcome to Art Royale!"}</h2>
-      <img src={logo} alt="Art Royale" className="home-logo" />
+      <p>ArtRoyale is a platform for creating and sharing digital art. Upload your artwork and attack other's characters to earn points!</p>
+      <p>
+        <Link to="/characters/recent" className="home-link">
+          View recent characters
+        </Link>
+      </p>
+      
+      
     </div>
   );
 }
