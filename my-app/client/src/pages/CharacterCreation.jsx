@@ -57,14 +57,14 @@ function CharacterCreation() {
     }
 
     return (
-        <div>
+        <div className="create-character-page detail-page">
             <h1>Create a New Character</h1>
             <p>This is where the character creation form will go.</p>
-            <Link to={`/users/${user.id}`}>Back to Profile</Link>
+            
 
             {error && <p className="error-message">{error}</p>}
 
-            <form style={{ marginTop: "20px" }} onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="characterName">Character Name</label>
                     <input

@@ -108,7 +108,7 @@ function UserPage() {
 
 
     return (
-        <div className="user-page">
+        <div className="user-page detail-page">
             <h1>{profileUser?.username}'s Profile</h1>
             <div className="user-info">
                 <div className="profile-banner">

@@ -105,7 +105,7 @@ function EditCharacter() {
     }
 
     return (
-        <div className="edit-character-page">
+        <div className="edit-character-page detail-page">
             <h2>Edit Character</h2>
             {error && <p className="error">{error}</p>}
             <form onSubmit={handleSubmit} className="edit-character-form">

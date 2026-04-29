@@ -41,8 +41,10 @@ function Login() {
   }
 
   return (
-    <div className="form-page">
+    <div className="form-page auth-page">
+      <p className="page-kicker">Welcome back</p>
       <h2>Login</h2>
+      <p>Sign in to create characters, leave attacks, and keep your roster up to date.</p>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -69,7 +71,7 @@ function Login() {
           Login
         </button>
       </form>
-      <p>
+      <p className="auth-footer">
         Don't have an account? <Link to="/register">Register here</Link>
       </p>
     </div>

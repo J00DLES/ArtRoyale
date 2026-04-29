@@ -82,7 +82,7 @@ function AttackPage() {
 	}
 
 	return (
-		<div>
+		<div className="attack-page">
 			<h1>Attack #{attack.id}</h1>
 
 			<p>
@@ -102,11 +102,6 @@ function AttackPage() {
 
 			<p>{attack.message}</p>
 
-			{canDelete && (
-				<button type="button" className="btn btn-danger" onClick={handleDelete} disabled={deleting}>
-					{deleting ? "Deleting..." : "Delete Attack"}
-				</button>
-			)}
 
 			{attack.imageUrl ? (
 				<a href={attack.imageUrl} target="_blank" rel="noreferrer" className="character-page-image-link">
@@ -114,6 +109,17 @@ function AttackPage() {
 				</a>
 			) : (
 				<p>No image for this attack.</p>
+			)}
+
+				{canDelete && (
+					<button
+						type="button"
+						className="btn btn-danger attack-delete-button"
+						onClick={handleDelete}
+						disabled={deleting}
+					>
+					{deleting ? "Deleting..." : "Delete Attack"}
+				</button>
 			)}
 		</div>
 	);

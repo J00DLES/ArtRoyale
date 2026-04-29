@@ -119,7 +119,7 @@ function CharacterPage() {
     }
 
     return (
-        <div>
+        <div className="detail-page character-page">
             <h1>{character.name}</h1>
             
             <h3>created by: <Link to={`/users/${character.userId}`}>{character.username || "Unknown Artist"}</Link></h3>
@@ -142,7 +142,7 @@ function CharacterPage() {
                 <p>No image available for this character yet.</p>
             )}
        
-                 <div>
+                 <div className="page-actions">
                 {user && user.id !== character.userId && (
                     <Link to={`/characters/${characterId}/attack`} className="btn btn-primary btn-attack">
                         Attack!
@@ -175,12 +175,12 @@ function CharacterPage() {
                     {attacks.map((attack) => (
                         <div key={attack.id}>
                             <Link to={`/attacks/${attack.id}`} className="attack-list-item">
-                                <strong>{attack.attacker_username || "unknown"}</strong>: {attack.message}
+                                <strong>by {attack.attacker_username || "unknown"}</strong> {attack.message}
                                 {attack.image_url && (
                                     <div>
                                         <img
                                             src={attack.image_url}
-                                            alt={`Attack from ${attack.attacker_username || "Unknown"}`}
+                                            alt={attack.message || "attack image"}
                                             className="character-page-image"
                                         />
                                     </div>

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 
 function RecentCharacters() {
     // shows the 20 most recently created or edited characters, with the most recent first
     const { user } = useAuth();
-    const navigate = useNavigate();
     const [characters, setCharacters] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -61,8 +60,11 @@ function RecentCharacters() {
     }
 
     return (
-        <div className="recent-characters-page">
-            <h2>Recently Created or Edited Characters</h2>
+        <div className="recent-characters-page detail-page">
+            <div>
+                <p className="page-kicker">Browse</p>
+                <h2>Recently Created or Edited Characters</h2>
+            </div>
             {characters.length === 0 ? (
                 <p>No characters found.</p>
             ) : (

@@ -41,8 +41,10 @@ function Register() {
   }
 
   return (
-    <div className="form-page">
+    <div className="form-page auth-page">
+      <p className="page-kicker">Join the arena</p>
       <h2>Register</h2>
+      <p>Create an account to build characters, share art, and enter the fight.</p>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -79,7 +81,7 @@ function Register() {
           Register
         </button>
       </form>
-      <p>
+      <p className="auth-footer">
         Already have an account? <Link to="/login">Login here</Link>
       </p>
     </div>
