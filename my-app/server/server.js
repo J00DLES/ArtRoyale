@@ -10,6 +10,7 @@ import authController from "./controllers/auth.js";
 import usersController from "./controllers/users.js";
 import charactersController from "./controllers/characters.js";
 import attacksController from "./controllers/attacks.js";
+import inspirationController from "./controllers/inspiration.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +35,7 @@ app.use("/api/auth", authController);
 app.use("/api/users", usersController);
 app.use("/api/characters", charactersController);
 app.use("/api/attacks", attacksController);
+app.use("/api/inspiration", inspirationController);
 
 // Serve the React app
 if (process.env.NODE_ENV === "production") {

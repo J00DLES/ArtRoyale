@@ -12,6 +12,7 @@ import UserCharacters from "./pages/UserCharacters";
 import Attack from "./pages/Attack";
 import AttackPage from "./pages/AttackPage";
 import RecentCharacters from "./pages/RecentCharacters";
+import Inspiration from "./pages/Inspiration";
 
 function App() {
   const { loading } = useAuth();
@@ -36,6 +37,7 @@ function App() {
           <Route path="/characters/:id/attack" element={<Attack />} />
           <Route path="/attacks/:id" element={<AttackPage />} />
           <Route path="/characters/recent" element={<RecentCharacters />} />
+          <Route path="/inspiration" element={<Inspiration />} />
         </Routes>
       </main>
     </>

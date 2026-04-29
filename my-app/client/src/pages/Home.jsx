@@ -14,6 +14,11 @@ function Home() {
           View recent characters
         </Link>
       </p>
+      <p>
+        <Link to="/inspiration" className="home-link">
+          Explore random inspiration
+        </Link>
+      </p>
       
       
     </div>
