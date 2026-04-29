@@ -53,7 +53,7 @@ These features are essential to meet the project goals:
 - [x] User profiles and character creation
 - [x] Attack submission system (including image upload via URL)
 - [x] Display of attacks and user interactions
-- [ ] Basic inspiration generator using an external API
+- [x] Basic inspiration generator using an external API
 
 Stretch Goals (Nice-to-Have)
 If time permits, the following features will enhance the project:

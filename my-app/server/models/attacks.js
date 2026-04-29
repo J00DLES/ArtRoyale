@@ -92,3 +92,14 @@ export async function getAttackById(attackId) {
 
   return result.rows[0] || null;
 }
+
+export async function deleteAttackById(attackId) {
+  const result = await pool.query(
+    `DELETE FROM attacks
+     WHERE id = $1
+     RETURNING id`,
+    [attackId]
+  );
+
+  return result.rows[0] || null;
+}

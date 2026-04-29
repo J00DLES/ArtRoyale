@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 function AttackPage() {
 	const { id: attackId } = useParams();
+	const { user } = useAuth();
+	const navigate = useNavigate();
 	const [attack, setAttack] = useState(null);
 	const [error, setError] = useState("");
+	const [deleting, setDeleting] = useState(false);
 
 	function normalizeImageUrl(rawUrl) {
 		if (!rawUrl || typeof rawUrl !== "string") return "";
@@ -47,6 +51,36 @@ function AttackPage() {
 	if (error) return <p>{error}</p>;
 	if (!attack) return <p>Loading attack...</p>;
 
+	const canDelete = user && Number(user.id) === Number(attack.attacker_id);
+
+	async function handleDelete() {
+		const confirmed = window.confirm("Delete this attack? This cannot be undone.");
+
+		if (!confirmed) {
+			return;
+		}
+
+		setDeleting(true);
+		setError("");
+
+		try {
+			const res = await fetch(`/api/attacks/${attackId}`, {
+				method: "DELETE",
+			});
+			const data = await res.json();
+
+			if (!res.ok) {
+				throw new Error(data.error || "Failed to delete attack.");
+			}
+
+			navigate(`/characters/${attack.character_id}`);
+		} catch (err) {
+			setError(err.message || "Failed to delete attack.");
+		} finally {
+			setDeleting(false);
+		}
+	}
+
 	return (
 		<div>
 			<h1>Attack #{attack.id}</h1>
@@ -67,6 +101,12 @@ function AttackPage() {
 			</p>
 
 			<p>{attack.message}</p>
+
+			{canDelete && (
+				<button type="button" className="btn btn-danger" onClick={handleDelete} disabled={deleting}>
+					{deleting ? "Deleting..." : "Delete Attack"}
+				</button>
+			)}
 
 			{attack.imageUrl ? (
 				<a href={attack.imageUrl} target="_blank" rel="noreferrer" className="character-page-image-link">
