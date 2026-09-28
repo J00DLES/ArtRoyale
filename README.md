@@ -1,4 +1,10 @@
-# Final Project Proposal 
+# Final Project Proposal
+
+## How to Run Project
+1. Create a database and run migrations
+2. Navigate to server folder and run these commands in seperate command lines.
+- `npm run server-dev`
+- `npm run client-dev`
 
 ## 1. Project Overview 
 This project is a web-based application inspired by ArtFight, designed to create an interactive and engaging space for digital artists to share their work, collaborate, and find creative inspiration. The application aims to replicate the core experience of an art “attack” game, where users create artwork featuring other users’ characters, while also adding new features that enhance creativity and accessibility.
